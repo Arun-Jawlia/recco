@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const Wrapper = styled.div`
   display: flex;
@@ -8,8 +7,6 @@ const Wrapper = styled.div`
   /* border: 1px solid black; */
   height: 13vh;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 0px 29px 0px;
-  
-  
 `;
 
 const Top = styled.div`
@@ -29,8 +26,8 @@ const Top = styled.div`
 const Item = styled.div`
   font-weight: ${(props) => props.bold || 400};
   font-size: ${(props) => props.fontSize || "16px"};
-  text-decoration: ${props=>props.textDecor || 'none'};
-  cursor: ${props=>props.cursor || 'arrow'};
+  text-decoration: ${(props) => props.textDecor || "none"};
+  cursor: ${(props) => props.cursor || "arrow"};
 `;
 
 const Bottom = styled.div`
@@ -61,7 +58,9 @@ const OrderSection = () => {
       <Top>
         <Item>Order :</Item>
 
-        <Item textDecor={'underline'} cursor={'pointer'} bold={"bold"}>32872ABC</Item>
+        <Item textDecor={"underline"} cursor={"pointer"} bold={"bold"}>
+          32872ABC
+        </Item>
       </Top>
       <Bottom>
         <Item fontSize={"20px"} bold={"bold"}>

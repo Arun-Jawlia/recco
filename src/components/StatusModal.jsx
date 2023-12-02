@@ -1,70 +1,73 @@
 import React, { useEffect } from "react";
 import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton,
-    Button
-  } from '@chakra-ui/react'
-  import CloseIcon from '@mui/icons-material/Close';
-  import CheckIcon from '@mui/icons-material/Check';
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+} from "@chakra-ui/react";
 import { useDispatch } from "react-redux";
-import { BASE_URL, fetchDataFromApi, getData } from "../utilis/api";
-import axios from 'axios'
+import { BASE_URL, getData } from "../utilis/api";
+import axios from "axios";
 import { getReccoData } from "../redux/dataSlice";
-  
 
-const StatusModal = ({modalOpened, setModalOpened, product_name ,id}) => {
+const StatusModal = ({ modalOpened, setModalOpened, product_name, id }) => {
   const dispatch = useDispatch();
+  console.log(id);
 
-const fetchData = () =>
-{
-  getData()
-  .then(res=>
-    {
-      dispatch(getReccoData(res))
-    })
-}
 
-  useEffect(() => {
+  const fetchData = () => {
+    getData().then((res) => {
+      // console.log(res.data);
+      dispatch(getReccoData(res.data));
+    });
+  };
+
+  useEffect(()=>
+  {
     fetchData()
-  }, []);
-
-
+  },[])
 
 
   // Function to update status : missing but not urgent
   const handleStatusMissing = () => {
     const payload = {
-      status: "Missing, but not Urgent",
+      status: "Missing",
     };
 
     axios.patch(`${BASE_URL}/products/${id}`, payload).then((res) => {
+      // fetchData();
       fetchData()
-      setModalOpened(false)
+      setModalOpened(false);
     });
+   
+    
   };
 
-
-  // Function to update status: Missing but very urgent 
-  const handleStatusMissingButUrgent = () =>
-  {
+  // Function to update status: Missing but very urgent
+  const handleStatusMissingButUrgent = () => {
     const payload = {
-      status: "Missing, but very Urgent",
-    };
+      status: "Missing, Urgent",
+    }
 
     axios.patch(`${BASE_URL}/products/${id}`, payload).then((res) => {
+      // fetchData();
+      // getData()
       fetchData()
-      setModalOpened(false)
+      setModalOpened(false);
     });
+   
+    // getData();
+  };
 
-  }
+  useEffect(() => {
+    getData()
+  }, []);
 
-
-
+  //
 
   return (
     <Modal isOpen={modalOpened} onClose={setModalOpened}>
@@ -72,13 +75,17 @@ const fetchData = () =>
       <ModalContent>
         <ModalHeader>Modal Title</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-         Is {product_name} urgent ?
-        </ModalBody>
+        <ModalBody>Is {product_name} urgent ?</ModalBody>
 
         <ModalFooter>
-          <Button variant="ghost" onClick={handleStatusMissing}>Yes</Button>
-          <Button onClick={handleStatusMissingButUrgent} colorScheme="blue" mr={3} >
+          <Button variant="ghost" onClick={handleStatusMissing}>
+            Yes
+          </Button>
+          <Button
+            onClick={handleStatusMissingButUrgent}
+            colorScheme="blue"
+            mr={3}
+          >
             No
           </Button>
         </ModalFooter>

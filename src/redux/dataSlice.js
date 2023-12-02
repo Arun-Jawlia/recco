@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
 export const dataSlice = createSlice({
   name: "data",
   initialState: {
@@ -11,7 +10,6 @@ export const dataSlice = createSlice({
   reducers: {
     getReccoData: (state, action) => {
       state.data = action.payload;
-    
     },
   },
 });

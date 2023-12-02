@@ -11,24 +11,38 @@ import {
   Input,
   FormLabel,
   Button,
+  Alert,
+  Box
 } from "@chakra-ui/react";
-import {  getData } from "../utilis/api";
-import { useDispatch } from "react-redux";
+import { BASE_URL,  getData } from "../utilis/api";
+import { getReccoData } from "../redux/dataSlice";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { useToast } from '@chakra-ui/react'
 
-const EditModal = ({ editModal, setEditModal }) => {
+const AddProductModal = ({ addModal, setAddModal }) => {
   const [img, setImg] = useState("");
   const [product_name, setProduct_Name] = useState("");
   const [brand, setBrand] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [previous_price, setPrevious_Price] = useState("");
-  const [previous_quantity, setPrevious_Quantity] = useState("");
-  const [status, setStatus] = useState("");
   const dispatch = useDispatch();
+  const toast = useToast()
+  // const {data} = useSelector(store=>store.data)
+
+  const fetchData = () => {
+    getData().then((res) => {
+      dispatch(getReccoData(res.data));
+    });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
 
 
-  const UpdateProduct = () => {
+  const AddProduct = () => {
     if (
       product_name !== "" &&
       quantity !== "" &&
@@ -38,29 +52,36 @@ const EditModal = ({ editModal, setEditModal }) => {
       const payload = {
         product_name: product_name,
         brand: brand,
-        quantity: quantity,
         price: price,
-        previous_price: price,
+        quantity: quantity,
+        previous_price: "",
+        previous_quantity: "",
+        img:
+          img ||
+          "https://cdn.pixabay.com/photo/2018/03/09/08/04/avocado-3210885_640.jpg",
+        status: "",
       };
+
+      axios.post(`${BASE_URL}/products`, payload).then((res) => {
+        // console.log(res.data)
+        fetchData()
+        setAddModal(false);
+        // setProduct_Name("");
+        // setBrand("");
+        // setPrice("");
+        // setQuantity("");
+        // setImg("");
+      });
     }
-  };
-
-  //   const fetchData = () => {
-  //     getData().then((res) => {
-  //       dispatch(getReccoData(res));
-  //     });
-  //   };
-
-  //   useEffect(() => {
-  //     fetchData();
-  //   }, []);
+    
+}
 
   return (
     <>
-      <Modal isOpen={editModal} onClose={setEditModal}>
+      <Modal isOpen={addModal} onClose={setAddModal}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Create your account</ModalHeader>
+          <ModalHeader>Add Recco Product</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>
@@ -72,7 +93,7 @@ const EditModal = ({ editModal, setEditModal }) => {
               />
             </FormControl>
 
-            <FormControl>
+            <FormControl mt={4}>
               <FormLabel>Product Name</FormLabel>
               <Input
                 name="product_name"
@@ -108,10 +129,10 @@ const EditModal = ({ editModal, setEditModal }) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button onClick={UpdateProduct} colorScheme="blue" mr={3}>
-              Update
+            <Button onClick={AddProduct} colorScheme="blue" mr={3}>
+              Add
             </Button>
-            <Button onClick={() => setEditModal(false)}>Cancel</Button>
+            <Button onClick={() => setAddModal(false)}>Cancel</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -119,4 +140,4 @@ const EditModal = ({ editModal, setEditModal }) => {
   );
 };
 
-export default EditModal;
+export default AddProductModal;
