@@ -11,6 +11,7 @@ export const dataSlice = createSlice({
   reducers: {
     getReccoData: (state, action) => {
       state.data = action.payload;
+    
     },
   },
 });

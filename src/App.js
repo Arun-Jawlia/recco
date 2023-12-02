@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { getReccoData } from "./redux/dataSlice";
 import { useEffect } from "react";
+import { fetchDataFromApi } from "./utilis/api";
 
 const Wrapper = styled.div`
   display: flex;
@@ -20,8 +21,8 @@ function App() {
   const dispatch = useDispatch();
 
   const getData = () => {
-    axios.get("http://localhost:8080/products").then((res) => {
-      console.log(res.data);
+    fetchDataFromApi('/products').then((res) => {
+      // console.log(res.data);
       dispatch(getReccoData(res.data));
     });
   };

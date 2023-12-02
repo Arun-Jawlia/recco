@@ -18,6 +18,8 @@ font-size: 18px;
 
     &:hover{
         cursor: pointer;
+        color: white;
+        transition: all 0.5s ease-in-out;
     }
 `;
 
